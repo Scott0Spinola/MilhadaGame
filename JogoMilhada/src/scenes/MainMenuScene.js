@@ -3,7 +3,17 @@ export default class MainMenuScene extends Phaser.Scene {
         super('MainMenuScene');
     }
 
+   
     create() {
+        const width = this.scale.width;
+        const height = this.scale.height;
+
+        this.background = this.add.tileSprite(0, 0, width, height, 'background');
+        this.background.setOrigin(0, 0);
+        this.background.setDepth(-1);
+        this.background.setTint(0x331a00);
+        this.background.setTileScale(0.5);
+
         this.music = this.sound.add('background_music', { loop: true });
         this.music.play();
 
@@ -11,7 +21,11 @@ export default class MainMenuScene extends Phaser.Scene {
         
         const startButton = this.add.text(400, 400, 'Start Game', { fontSize: '32px', fill: '#fff' }).setOrigin(0.5);
         startButton.setInteractive();
-        startButton.on('pointerdown', () => this.scene.start('GameScene'));
+        startButton.on('pointerdown', () => {
+            this.scene.launch('GameScene');
+            this.scene.launch('UIScene');
+            this.scene.stop();
+        });
 
         const settingsButton = this.add.text(400, 450, 'Settings', { fontSize: '32px', fill: '#fff' }).setOrigin(0.5);
         settingsButton.setInteractive();
