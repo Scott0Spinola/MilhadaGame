@@ -7,7 +7,7 @@ export default class MainMenuScene extends Phaser.Scene {
         this.music = this.sound.add('background_music', { loop: true });
         this.music.play();
 
-        this.add.text(400, 300, 'Milhada Game', { fontSize: '64px', fill: '#fff' }).setOrigin(0.5);
+        this.add.text(400, 150, 'Milhada Game', { fontSize: '64px', fill: '#fff' }).setOrigin(0.5);
         
         const startButton = this.add.text(400, 400, 'Start Game', { fontSize: '32px', fill: '#fff' }).setOrigin(0.5);
         startButton.setInteractive();
