@@ -1,0 +1,14 @@
+{
+  "name": "jogomilhada",
+  "version": "1.0.0",
+  "description": "A web game based on the Milhada card game.",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "serve"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "serve": "^14.2.1"
+  }
+}
