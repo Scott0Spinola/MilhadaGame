@@ -4,14 +4,9 @@ export default class GameScene extends Phaser.Scene {
     }
 
     create() {
-        const width = this.scale.width;
-        const height = this.scale.height;
-
-        this.background = this.add.tileSprite(0, 0, width, height, 'background');
-        this.background.setOrigin(0, 0);
-        this.background.setDepth(-1);
-        this.background.setTint(0x331a00);
-        this.background.setTileScale(0.5);
+        const width = this.cameras.main.width;
+        const height = this.cameras.main.height;
+        this.add.image(width / 2, height / 2, 'background').setDisplaySize(width, height);
 
         this.scene.launch('UIScene');
         // Game logic will go here

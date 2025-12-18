@@ -3,43 +3,36 @@ export default class MainMenuScene extends Phaser.Scene {
         super('MainMenuScene');
     }
 
-   
     create() {
-        const width = this.scale.width;
-        const height = this.scale.height;
+        const width = this.cameras.main.width;
+        const height = this.cameras.main.height;
+        const centerX = width / 2;
+        const centerY = height / 2;
 
-        this.background = this.add.tileSprite(0, 0, width, height, 'background');
-        this.background.setOrigin(0, 0);
-        this.background.setDepth(-1);
-        this.background.setTint(0x331a00);
-        this.background.setTileScale(0.5);
+        this.add.image(centerX, centerY, 'background').setDisplaySize(width, height);
 
         this.music = this.sound.add('background_music', { loop: true });
         this.music.play();
 
-        this.add.text(400, 150, 'Milhada Game', { fontSize: '64px', fill: '#fff' }).setOrigin(0.5);
+        this.add.text(centerX, centerY - 100, 'Milhada Game', { fontSize: '64px', fill: '#fff' }).setOrigin(0.5);
         
-        const startButton = this.add.text(400, 400, 'Start Game', { fontSize: '32px', fill: '#fff' }).setOrigin(0.5);
+        const startButton = this.add.text(centerX, centerY, 'Start Game', { fontSize: '32px', fill: '#fff' }).setOrigin(0.5);
         startButton.setInteractive();
-        startButton.on('pointerdown', () => {
-            this.scene.launch('GameScene');
-            this.scene.launch('UIScene');
-            this.scene.stop();
-        });
+        startButton.on('pointerdown', () => this.scene.start('GameScene'));
 
-        const settingsButton = this.add.text(400, 450, 'Settings', { fontSize: '32px', fill: '#fff' }).setOrigin(0.5);
+        const settingsButton = this.add.text(centerX, centerY + 50, 'Settings', { fontSize: '32px', fill: '#fff' }).setOrigin(0.5);
         settingsButton.setInteractive();
         settingsButton.on('pointerdown', () => this.showSettings());
 
-        const quitButton = this.add.text(400, 500, 'Quit', { fontSize: '32px', fill: '#fff' }).setOrigin(0.5);
+        const quitButton = this.add.text(centerX, centerY + 100, 'Quit', { fontSize: '32px', fill: '#fff' }).setOrigin(0.5);
         quitButton.setInteractive();
         quitButton.on('pointerdown', () => this.game.destroy(true));
 
-        this.createSettingsOverlay();
+        this.createSettingsOverlay(centerX, centerY);
     }
 
-    createSettingsOverlay() {
-        this.settingsOverlay = this.add.container(400, 300).setDepth(1).setVisible(false);
+    createSettingsOverlay(x, y) {
+        this.settingsOverlay = this.add.container(x, y).setDepth(1).setVisible(false);
 
         const background = this.add.graphics();
         background.fillStyle(0x000000, 0.8);
