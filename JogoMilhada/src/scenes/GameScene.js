@@ -56,6 +56,9 @@ export default class GameScene extends Phaser.Scene {
 
     _resetRoundFields() {
         for (const player of this.state.players) {
+            if (player.bet !== null) {
+                player.coins += player.bet;
+            }
             player.bet = null;
             player.guess = null;
         }
