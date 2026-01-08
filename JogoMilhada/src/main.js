@@ -1,7 +1,7 @@
 import BootScene from './scenes/BootScene.js';
 import MainMenuScene from './scenes/MainMenuScene.js';
 import GameScene from './scenes/GameScene.js';
-import UIScene from './scenes/UIScene.js';
+import UIScene from './scenes/UserInterface.js';
 import EndScene from './scenes/EndScene.js';
 
 const config = {
