@@ -20,6 +20,7 @@ export default class UIScene extends Phaser.Scene {
 
         this.roundText = this.add.text(width - 20, 20, 'Ronda: -', this.headerStyle).setOrigin(1, 0);
         this.phaseText = this.add.text(20, 20, 'Fase: -', this.headerStyle).setOrigin(0, 0);
+        this.totalCoinsText = this.add.text(width / 2, 20, 'Moedas totais: -', this.headerStyle).setOrigin(0.5, 0);
         this.messageText = this.add.text(20, 55, '', { fontSize: '18px', fill: '#fff', wordWrap: { width: width - 40 } }).setOrigin(0, 0);
 
         this.playerSummaryText = this.add.text(20, height - 160, '', this.textStyle).setOrigin(0, 0);
@@ -63,8 +64,8 @@ export default class UIScene extends Phaser.Scene {
         this.confirmBtn = makeButton(width - 250, height - 25, 'Confirmar', () => this._confirm());
 
         // Player hand shown on the table area (closed after choosing)
-        // Player hand shown bottom-left (closed after choosing)
-        this.playerHandOnTable = this.add.image(20, height - 20, 'maoFechado').setOrigin(0, 1);
+        // Anchored bottom-right
+        this.playerHandOnTable = this.add.image(width - 20, height - 20, 'maoFechado').setOrigin(1, 1);
         this.playerHandOnTable.setScale(0.5);
         this.playerHandOnTable.setVisible(false);
 
@@ -93,8 +94,8 @@ export default class UIScene extends Phaser.Scene {
         if (mode === 'guess') this.inputTitle.setText('Palpite (total)');
 
         this.handPreview.setVisible(mode === 'bet');
-        if (this.leftBtn) this.leftBtn.setVisible(mode === 'bet');
-        if (this.rightBtn) this.rightBtn.setVisible(mode === 'bet');
+        if (this.leftBtn) this.leftBtn.setVisible(mode === 'bet' || mode === 'guess');
+        if (this.rightBtn) this.rightBtn.setVisible(mode === 'bet' || mode === 'guess');
     }
 
     _changeValue(delta) {
@@ -123,9 +124,12 @@ export default class UIScene extends Phaser.Scene {
     _render(state) {
         this.roundText.setText(`Ronda: ${state.gameRound}`);
         this.phaseText.setText(`Fase: ${this._phaseLabel(state.phase)}`);
-        this.messageText.setText(state.message || '');
 
         const activePlayers = state.players.filter(p => p.active);
+        const totalCoins = activePlayers.reduce((sum, p) => sum + (p.coins + (p.bet ?? 0)), 0);
+        this.totalCoinsText.setText(`Moedas totais: ${totalCoins}`);
+        this.messageText.setText(state.message || '');
+
         const threshold = this._thresholdForCount(activePlayers.length);
 
         const player = state.players.find(p => p.isHuman);
@@ -173,7 +177,8 @@ export default class UIScene extends Phaser.Scene {
             if (player.guess !== null && player.guess !== undefined) {
                 this._setControlMode('hidden');
             } else {
-                this._setControlMode('guess', { min: 0, max: state.maxGuess, value: 0 });
+                const max = typeof state.maxGuess === 'number' ? state.maxGuess : totalCoins;
+                this._setControlMode('guess', { min: 0, max, value: 0 });
             }
             // During guess and reveal, keep the closed hand visible if the player has already bet.
             if (player.bet !== null && player.bet !== undefined) {
